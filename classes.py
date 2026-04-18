@@ -2,7 +2,7 @@ import pygame
 
 class Text:
     def __init__(self, surface, text, color, x, y, size):
-        font_name = pygame.font.match_font("gillsansultracondensed")
+        font_name = pygame.font.match_font("maturascriptcapitals")
         self.surface = surface
         self.text = text
         self.size = size
