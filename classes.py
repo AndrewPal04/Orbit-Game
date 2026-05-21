@@ -42,26 +42,21 @@ class Button(pygame.sprite.Sprite):
         return pressed
     
 class Player(pygame.sprite.Sprite):
-    def __init__(self,image,scale,x,y,):
+    def __init__(self,image,scale,x,y):
         pygame.sprite.Sprite.__init__(self)
         width = image.get_width()
         height = image.get_height()
-        self.image = pygame.transform.scale(
-            image, (int(width * scale), int(height * scale))
-        )
+        self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
+    def update(self):
+        keystate = pygame.key.get_pressed()
+        if pygame.mouse.get_pressed()[0] == 1 or keystate[pygame.K_SPACE]:
+            self.rect.y -= 10
+        else:
+            self.rect.y += 10
 
-    def update(self, target):
-        if target.rect.x < self.rect.x:
-            self.rect.x -= 6
-        if target.rect.x > self.rect.x:
-            self.rect.x += 6
-        if target.rect.y < self.rect.y:
-            self.rect.y -= 6
-        if target.rect.y > self.rect.y:
-            self.rect.y += 6
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, surface, image, scale, x, y):

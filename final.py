@@ -9,6 +9,7 @@ import random
 from classes import Background
 from classes import Button
 from classes import Text
+from classes import Player
 pygame.init()
 
 # print(pygame.font.get_fonts())
@@ -71,6 +72,7 @@ while True:
 
     if play1.draw():
         level = 1
+        break
     if play2.draw():
         pass
     if play3.draw():
@@ -80,14 +82,47 @@ while True:
     clock.tick(60)
 
 if level == 1:
+    #moving backgrounds
+    stars1 = Background(screen, starsIMG, 5, 500 ,300)
+    stars2 = Background(screen, starsIMG, 5, 500, 300)
+    stars2.rect.left = stars1.rect.right
+    #Player
+    shipIMG = pygame.image.load("WAVE.png")
+    ship = Player(shipIMG, .04 , 500 , 300)
+
+    sprite_group = pygame.sprite.Group()
+    sprite_group.add(ship)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                pygame.quit
                 quit()
+        stars1.rect.x -= 4
+        stars2.rect.x -= 4
+        
+        if stars1.rect.right < 0:
+            stars1.rect.left = stars2.rect.right
+        if stars2.rect.right < 0:
+            stars2.rect.left = stars1.rect.right
+        stars1.draw()
+        stars2.draw()
+        sprite_group.draw(screen)
+        sprite_group.update()
+
+        top = pygame.draw.rect(screen,(165, 169, 180), (0,0,1000,100))
+        bottom = pygame.draw.rect(screen, (165, 169, 180), (0,500,1000,100))
+        
+        #stop player from going too high or low
+        if ship.rect.top <= 100:
+            ship.rect.top = 100
+        if ship.rect.bottom >= 500:
+            ship.rect.bottom = 500
+
         pygame.display.update()
         clock.tick(60)
-elif level == 2:
+        
+elif level == 2: #GRAVITY GUY GAME: goes from top to bottom, or bottom to top (gear player image)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -106,10 +141,11 @@ else:
 
 """
 Homework
-Since we will be starting on the levels in our next class, I want you
-to design our main character that will be navigating through the maps.
-You can create multiple designs, so users can select their favorite,
-and use it in the program. Make sure to save it as a .png, and put the
-image in the replit so we can use it next week.
+For your homework, I want you to plan and design a couple
+of obstacles that the user will have to dodge in every level.
+You can make different obstacles for each level, or use the
+same ones in all of them. Once you create the obstacle, try 
+to put it on the screen, and make it move left so it flies
+past the user dodging it.
 Good Luck!
 """
