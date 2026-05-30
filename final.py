@@ -100,13 +100,15 @@ if level == 1:
     spike2 = Obstacle(spikeBIMG, .1, 1000, 460)
     spike3 = Obstacle(spikeBIMG, .1, 200, 460)
     spike4 = Obstacle(spikeIMG, .1, 300, 140)
-    
+    mine1 = Obstacle(mineIMG, .03, 2000, 300)
+
     sprite_group = pygame.sprite.Group()
     sprite_group.add(ship)
     sprite_group.add(spike1)
     sprite_group.add(spike2)
     sprite_group.add(spike3)
     sprite_group.add(spike4)
+    sprite_group.add(mine1)
     start = time.time()
     win = False
     while True:
@@ -116,7 +118,7 @@ if level == 1:
             if event.type == pygame.QUIT:
                 pygame.quit
                 quit()
-        if timePassed > 60:
+        if timePassed > 50:
             win = True
             break
         stars1.rect.x -= 4
@@ -125,6 +127,7 @@ if level == 1:
         spike2.rect.x -= 4
         spike3.rect.x -= 4
         spike4.rect.x -= 4
+        mine1.rect.x -= 4
         
         if stars1.rect.right < 0:
             stars1.rect.left = stars2.rect.right
@@ -139,6 +142,9 @@ if level == 1:
             spike3.rect.left = random.randint(1000,1400)
         if spike4.rect.right <0:
             spike4.rect.left = random.randint(1000,1400)
+        if mine1.rect.right <0:
+            mine1.rect.left = random.randint(1500,2000)
+            mine1.rect.y = random.randint(200,400)
 
         stars1.draw()
         stars2.draw()
@@ -165,6 +171,9 @@ if level == 1:
             break
         if pygame.sprite.collide_rect(ship, spike4):
             print("Collided with Spike!")
+            break
+        if pygame.sprite.collide_rect(ship, mine1):
+            print("Collided with Mine!")
             break
 
         pygame.display.update()
