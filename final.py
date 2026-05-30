@@ -5,11 +5,13 @@ space waves
 Github: https://github.com/AndrewPal04/Orbit-Game
 """
 import pygame
+import time
 import random
 from classes import Background
 from classes import Button
 from classes import Text
 from classes import Player
+from classes import Obstacle
 pygame.init()
 
 # print(pygame.font.get_fonts())
@@ -25,7 +27,6 @@ playimg = pygame.image.load("play.png")
 play = Button(screen, playimg, 1,500, 400)
 
 t = Text(screen, "Orbit", (247,194,2), 500, 100, 200)
-
 
 #Start Screen
 while True:
@@ -56,6 +57,7 @@ lvl3 = Background(screen, lvl3qqq, 0.305,820,200)
 play1 = Button(screen, playimg, 0.68,175, 400)
 play2 = Button(screen, playimg, 0.68,500, 400)
 play3 = Button(screen, playimg, 0.68,820, 400)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -88,23 +90,56 @@ if level == 1:
     stars2.rect.left = stars1.rect.right
     #Player
     shipIMG = pygame.image.load("WAVE.png")
-    ship = Player(shipIMG, .04 , 500 , 300)
+    ship = Player(shipIMG, .03 , 500 , 300)
 
+    #Obstacles
+    spikeIMG = pygame.image.load("spikeTop.png")
+    spikeBIMG = pygame.image.load("spikeBottom.png")
+    mineIMG = pygame.image.load("mine.png")
+    spike1 = Obstacle(spikeIMG, .1, 800, 140)
+    spike2 = Obstacle(spikeBIMG, .1, 1000, 460)
+    spike3 = Obstacle(spikeBIMG, .1, 200, 460)
+    spike4 = Obstacle(spikeIMG, .1, 300, 140)
+    
     sprite_group = pygame.sprite.Group()
     sprite_group.add(ship)
-
+    sprite_group.add(spike1)
+    sprite_group.add(spike2)
+    sprite_group.add(spike3)
+    sprite_group.add(spike4)
+    start = time.time()
+    win = False
     while True:
+        end = time.time()
+        timePassed = end-start
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit
                 quit()
+        if timePassed > 60:
+            win = True
+            break
         stars1.rect.x -= 4
         stars2.rect.x -= 4
+        spike1.rect.x -= 4
+        spike2.rect.x -= 4
+        spike3.rect.x -= 4
+        spike4.rect.x -= 4
         
         if stars1.rect.right < 0:
             stars1.rect.left = stars2.rect.right
         if stars2.rect.right < 0:
             stars2.rect.left = stars1.rect.right
+
+        if spike1.rect.right <0:
+            spike1.rect.left = random.randint(1000,1400)
+        if spike2.rect.right <0:
+            spike2.rect.left = random.randint(1000,1400)
+        if spike3.rect.right <0:
+            spike3.rect.left = random.randint(1000,1400)
+        if spike4.rect.right <0:
+            spike4.rect.left = random.randint(1000,1400)
+
         stars1.draw()
         stars2.draw()
         sprite_group.draw(screen)
@@ -118,6 +153,19 @@ if level == 1:
             ship.rect.top = 100
         if ship.rect.bottom >= 500:
             ship.rect.bottom = 500
+
+        if pygame.sprite.collide_rect(ship, spike1):
+            print("Collided with Spike!")
+            break
+        if pygame.sprite.collide_rect(ship, spike2):
+            print("Collided with Spike!")
+            break
+        if pygame.sprite.collide_rect(ship, spike3):
+            print("Collided with Spike!")
+            break
+        if pygame.sprite.collide_rect(ship, spike4):
+            print("Collided with Spike!")
+            break
 
         pygame.display.update()
         clock.tick(60)
@@ -139,13 +187,29 @@ else:
         pygame.display.update()
         clock.tick(60)
 
+
+if win:
+    winText = Text(screen, "YOU WIN!", (247, 194, 2), 500, 300, 100)
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        #Draw win text
+        stars.draw()
+        winText.draw()
+
+        pygame.display.update()
+        clock.tick(60)
+
 """
 Homework
-For your homework, I want you to plan and design a couple
-of obstacles that the user will have to dodge in every level.
-You can make different obstacles for each level, or use the
-same ones in all of them. Once you create the obstacle, try 
-to put it on the screen, and make it move left so it flies
-past the user dodging it.
+For homework I want you to use the following link
+to begin making your final presentation for your project!
+https://docs.google.com/presentation/d/1SvjGVSDHrpJ3E__emNbEpPLVFicQvc0u9rTCRFXXVmg/edit?usp=sharing
+Create a copy of the slides, and fill in as much as you can
+so far for your project! Try to add in pictures that you use in your project
+to make it look as cool as possible, and fill out at least
+4 of the slides for homework.
 Good Luck!
 """
