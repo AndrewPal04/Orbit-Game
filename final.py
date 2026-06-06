@@ -40,7 +40,6 @@ while True:
         break 
     t.draw()
 
-
     pygame.display.update()
     clock.tick(60)
 
@@ -58,6 +57,10 @@ play1 = Button(screen, playimg, 0.68,175, 400)
 play2 = Button(screen, playimg, 0.68,500, 400)
 play3 = Button(screen, playimg, 0.68,820, 400)
 
+lockIMG = pygame.image.load("lock.png")
+lock1 = Background(screen, lockIMG, 0.2 , 500 ,500)
+lock2 = Background(screen, lockIMG, 0.2, 825 ,500)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -71,6 +74,8 @@ while True:
     lvl1.draw()
     lvl2.draw()
     lvl3.draw()
+    lock1.draw()
+    lock2.draw()
 
     if play1.draw():
         level = 1
@@ -111,6 +116,11 @@ if level == 1:
     sprite_group.add(mine1)
     start = time.time()
     win = False
+    restart = False
+
+    pygame.mixer.init()
+    pygame.mixer.music.load("lvl1.mp3")
+    pygame.mixer.music.play()
     while True:
         end = time.time()
         timePassed = end-start
@@ -118,8 +128,9 @@ if level == 1:
             if event.type == pygame.QUIT:
                 pygame.quit
                 quit()
-        if timePassed > 50:
+        if timePassed > 60:
             win = True
+            pygame.mixer.music.stop()
             break
         stars1.rect.x -= 4
         stars2.rect.x -= 4
@@ -162,19 +173,31 @@ if level == 1:
 
         if pygame.sprite.collide_rect(ship, spike1):
             print("Collided with Spike!")
-            break
+            restart = True
         if pygame.sprite.collide_rect(ship, spike2):
             print("Collided with Spike!")
-            break
+            restart = True
         if pygame.sprite.collide_rect(ship, spike3):
             print("Collided with Spike!")
-            break
+            restart = True
         if pygame.sprite.collide_rect(ship, spike4):
             print("Collided with Spike!")
-            break
+            restart = True
         if pygame.sprite.collide_rect(ship, mine1):
             print("Collided with Mine!")
-            break
+            restart = True
+            
+        if restart:
+            pygame.mixer.music.stop()
+            start = time.time()
+            spike1.rect.x = 800
+            spike2.rect.x = 1000
+            spike3.rect.x = 200
+            spike4.rect.x = 300
+            mine1.rect.x = 2000
+            restart = False
+            pygame.mixer.music.play()
+
 
         pygame.display.update()
         clock.tick(60)
@@ -213,12 +236,10 @@ if win:
 
 """
 Homework
-For homework I want you to use the following link
-to begin making your final presentation for your project!
-https://docs.google.com/presentation/d/1SvjGVSDHrpJ3E__emNbEpPLVFicQvc0u9rTCRFXXVmg/edit?usp=sharing
-Create a copy of the slides, and fill in as much as you can
-so far for your project! Try to add in pictures that you use in your project
-to make it look as cool as possible, and fill out at least
-4 of the slides for homework.
+For homework, I want you to go through the slides, and review your
+presentation. Be ready to answer any questions you will get during
+the presentation, so make sure you study the code, and find any parts
+that you feel like you wouldn't know how to explain, so I can help you
+before the presentation next week.
 Good Luck!
 """
